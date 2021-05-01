@@ -15,7 +15,7 @@ public class MetroCalculations {
 
         InitializeMetroStopsAndLines(stopsAndTurns, lines);
 
-        Point2D novy_bod = new Point2D(650, 75, "Novy", PointType.STOP);
+        Point2D novy_bod = new Point2D(250, 250, "Novy", PointType.STOP);
 
 
         for (var line :
@@ -32,7 +32,8 @@ public class MetroCalculations {
         try {
             ZjistiTrasuPomocuKruhu(stopsAndTurns, novy_bod.X, novy_bod.Y, metroPoints, g);
         } catch (Exception exception) {
-            System.out.println(exception.getMessage());;
+            System.out.println(exception.getMessage());
+            ;
 
         }
         long endTime = System.nanoTime();
@@ -161,7 +162,20 @@ public class MetroCalculations {
             }
             in[0]++;
 
-        }while (!(zastavky.stream().anyMatch(q -> es[0].contains(q.X, q.Y)))  && !(metroPoints.stream().anyMatch(q -> es[0].contains(q.X, q.Y))));
+            if ((zastavky.stream().anyMatch(q -> es[0].contains(q.X, q.Y))) || (metroPoints.stream().anyMatch(q -> es[0].contains(q.X, q.Y)))) {
+                var foundStop = zastavky.stream().filter(w -> es[0].contains(w.X, w.Y)).findFirst();
+                var foundPoint = metroPoints.stream().filter(w -> es[0].contains(w.X, w.Y)).findFirst();
+
+                if(foundStop.isPresent()){
+                    System.out.println("Byl zjištěň nejbližší bod metra, kterým je zastávka '" + foundStop.get().Name + "' Na souřadnicích: X: " + foundStop.get().X + ",Y: " + foundStop.get().Y );
+                }
+
+                else if(foundPoint.isPresent()){
+                    System.out.println("Byl zjištěň nejbližší bod metra, který je na souřadnicích : X: " + foundPoint.get().X + ",Y: " + foundPoint.get().Y );
+                }
+            }
+
+        } while (!(zastavky.stream().anyMatch(q -> es[0].contains(q.X, q.Y))) && !(metroPoints.stream().anyMatch(q -> es[0].contains(q.X, q.Y))));
         /*while ((!zastavky.stream().anyMatch(q -> (q.X == x + in[0]) && (q.Y == y + in[0]) || (q.X == x + in[0]) && (q.Y == y - in[0]) || (q.X == x - in[0]) && (q.Y == y - in[0]) || (q.X == x - in[0]) && (q.Y == y + in[0]))) || (!metroPoints.stream().anyMatch(q -> (q.X == x + in[0]) && (q.Y == y + in[0]) || (q.X == x + in[0]) && (q.Y == y - in[0]) || (q.X == x - in[0]) && (q.Y == y - in[0]) || (q.X == x - in[0]) && (q.Y == y + in[0]))));*/
     }
 
